@@ -11,7 +11,7 @@ class FunctionalTests(unittest.TestCase):
         options.add_argument('--no-sandbox')
         self.driver = webdriver.Chrome(options=options)
 
-    def test_selenium(self):
+    def test_home(self):
         try:
             webAppUrl = pytest.config.getoption('webAppUrl')
             response = self.driver.get(webAppUrl)
@@ -22,8 +22,42 @@ class FunctionalTests(unittest.TestCase):
         except Exception as e:
             pytest.fail('tests_selenium.Error occurred while executing tests: ' + str(e))
 
+    def test_about(self):
+        try:
+            webAppUrl = pytest.config.getoption('webAppUrl')
+            response = self.driver.get(webAppUrl + "about")
+            title = self.driver.title
+            self.assertIn("About - Python Django Application", title)
+        except AssertionError:
+            raise
+        except Exception as e:
+            pytest.fail('tests_selenium.Error occurred while executing tests: ' + str(e))
+
+    def test_contact(self):
+        try:
+            webAppUrl = pytest.config.getoption('webAppUrl')
+            response = self.driver.get(webAppUrl + "contact")
+            title = self.driver.title
+            self.assertIn("Contact - Python Django Application", title)
+        except AssertionError:
+            raise
+        except Exception as e:
+            pytest.fail('tests_selenium.Error occurred while executing tests: ' + str(e))
+
+    def test_login(self):
+        try:
+            webAppUrl = pytest.config.getoption('webAppUrl')
+            response = self.driver.get(webAppUrl + "login")
+            title = self.driver.title
+            self.assertIn("Log in - Python Django Application", title)
+        except AssertionError:
+            raise
+        except Exception as e:
+            pytest.fail('tests_selenium.Error occurred while executing tests: ' + str(e))
+
     def tearDown(self):
         try:
+            print "Tearing down the browser..."
             self.driver.quit()
         except Exception as e:
             print('tearDown.Error occurred while trying to close the selenium chrome driver: ' + str(e))

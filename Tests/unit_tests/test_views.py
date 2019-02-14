@@ -19,6 +19,7 @@ os.environ.setdefault(
 )
 django.setup()
 
+
 class ViewTest(TestCase):
     """Tests for the application views."""
 
