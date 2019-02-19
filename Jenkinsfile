@@ -57,8 +57,6 @@ start /min python Application\\manage.py runserver 0.0.0.0:8000
 
 c:\\sleep.exe 5
 
-set ChromeWebDriver="C:\\Python37\\Scripts"
-
 python -m pytest --verbose --cov --html=Reports\\functest_report.html Tests\\functional_tests --webAppUrl http://localhost:8000/
 
 c:\\sleep.exe 5 
@@ -96,7 +94,7 @@ start /min python Application\\manage.py runserver 0.0.0.0:8000
 
 c:\\sleep.exe 5
 
-python -m robot -d Reports\regression Tests\regression_tests\Azur-webapp-login.robot
+python -m robot -d Reports\\regression Tests\\regression_tests\\Azur-webapp-login.robot
 
 c:\\sleep.exe 5 
 
