@@ -10,7 +10,7 @@ node ('linux_slave') {
 	stage ('Webapp_CI - Build') {
  	
 // Unable to convert a build step referring to "hudson.plugins.ws__cleanup.PreBuildCleanup". Please verify and convert manually if required.
-//buildWrappers.'hudson.plugins.ws__cleanup.PreBuildCleanup'			
+//buildWrappers.'hudson.plugins.ws__cleanup.PreBuildCleanup'
 // Unable to convert a build step referring to "hudson.plugins.timestamper.TimestamperBuildWrapper". Please verify and convert manually if required.
 //buildWrappers.'hudson.plugins.timestamper.TimestamperBuildWrapper'
 // Shell build step
@@ -67,5 +67,17 @@ taskkill -IM python.exe /F
  """ 
 		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'Reports', reportFiles: 'functest_report.html', reportName: 'Functional Test Report', reportTitles: 'Functional Test Report'])
 	}
+}
+node ('master') { 
+
+	stage ('Webapp_SelRegression - Build') {
+// Shell build step
+sh """ 
+docker build -t 'azur_webapp:latest' .
+docker create --name azure_webapp -p 8000:8000 -p 2222:2222 azur_webapp:latest && docker start azure_webapp
+ """ 
+		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'Reports\\regression', reportFiles: 'report.html', reportName: 'Regression Test Report', reportTitles: 'Regression Test Report'])
+		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'Reports\\regression', reportFiles: 'log.html', reportName: 'Regression Test Log', reportTitles: 'Regression Test Log'])
+}
 }
 }
