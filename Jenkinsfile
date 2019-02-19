@@ -32,6 +32,8 @@ fi
 sudo python3.6 -m pytest --verbose --cov --html=Reports/unittest_report.html Tests/unit_tests/ 
  """
 		archiveArtifacts allowEmptyArchive: false, artifacts: '*.zip', caseSensitive: true, defaultExcludes: true, excludes: 'Reports', fingerprint: false, onlyIfSuccessful: false 
+		cifsPublisher(publishers: [[configName: 'test_webserver', transfers: [[cleanRemote: true, excludes: '', flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*.zip']], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false]])
+		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'Reports', reportFiles: 'unittest_report.html', reportName: 'Unit Test Report', reportTitles: 'Unit Test Report'])
 	}
 }
 	node ('windows') { 
@@ -43,19 +45,19 @@ c:\\unzip.exe -o Azur_webapp.zip
 
 c:\\sleep.exe 5
 
-pip3 install -r Application/requirements.txt
+pip3 install -r Application\\requirements.txt
 
 pip3 install pytest pytest-html pytest-cov selenium
 
 c:\\sleep.exe 5
 
-start /min python Application/manage.py runserver 0.0.0.0:8000
+start /min python Application\\manage.py runserver 0.0.0.0:8000
 
 c:\\sleep.exe 5
 
 set ChromeWebDriver="C:\\Python37\\Scripts"
 
-python -m pytest --verbose --cov --html=Reports/functest_report.html Tests\functional_tests --webAppUrl http://localhost:8000/
+python -m pytest --verbose --cov --html=Reports\\functest_report.html Tests\\functional_tests --webAppUrl http://localhost:8000/
 
 c:\\sleep.exe 5 
 
