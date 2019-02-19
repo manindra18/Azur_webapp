@@ -57,7 +57,7 @@ class FunctionalTests(unittest.TestCase):
 
     def tearDown(self):
         try:
-            print "Tearing down the browser..."
+            print ("Tearing down the browser...")
             self.driver.quit()
         except Exception as e:
             print('tearDown.Error occurred while trying to close the selenium chrome driver: ' + str(e))
