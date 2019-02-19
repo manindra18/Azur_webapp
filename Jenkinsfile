@@ -91,7 +91,7 @@ pip3 install robotframework-ride --trusted-host pypi.org
 
 c:\\sleep.exe 5
 
-python -m robot -d Reports\\regression Tests\\regression_tests\\Azur-webapp-login.robot
+python -m robot -d Reports\\regression --variable URL:"http://192.168.4.81:8000/login/" Tests\\regression_tests\\Azur-webapp-login.robot
 
 c:\\sleep.exe 5 
 
