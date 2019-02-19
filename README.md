@@ -6,7 +6,7 @@ To build a Docker continer :
 docker build -t 'azur_webapp:latest' .
 docker rm -f test_webapp
 docker create --name test_webapp -p 8000:8000 -p 2222:2222 azur_webapp:latest && docker start test_webapp
--------------------------------------------------
+
 To start the django server in background in windows:
 ----------------------------------------------------
 start /min python Application/manage.py runserver 0.0.0.0:8000
@@ -44,7 +44,6 @@ python -m pytest --verbose --cov --html=Reports\functest_report.html Tests\funct
 c:\sleep.exe 5 
 
 tasklist | find /i "python.exe" && taskkill /im python.exe /F || echo process "python.exe" not running.
--------------------------------------------------------------
 
 Robot framework packages need and execution of regression tests:
 ==================================================================
