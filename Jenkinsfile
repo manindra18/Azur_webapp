@@ -34,4 +34,33 @@ sudo python3.6 -m pytest --verbose --cov --html=Reports/unittest_report.html Tes
 		archiveArtifacts allowEmptyArchive: false, artifacts: '*.zip', caseSensitive: true, defaultExcludes: true, excludes: 'Reports', fingerprint: false, onlyIfSuccessful: false 
 	}
 }
+	node ('windows') { 
+
+	stage ('Webapp_SelFuncTest - Build') {
+// Batch build step
+bat """ 
+c:\\unzip.exe -o Azur_webapp.zip
+
+c:\\sleep.exe 5
+
+pip3 install -r Application/requirements.txt
+
+pip3 install pytest pytest-html pytest-cov selenium
+
+c:\\sleep.exe 5
+
+start /min python Application/manage.py runserver 0.0.0.0:8000
+
+c:\\sleep.exe 5
+
+set ChromeWebDriver="C:\\Python37\\Scripts"
+
+python -m pytest --verbose --cov --html=Reports/functest_report.html Tests\functional_tests --webAppUrl http://localhost:8000/
+
+c:\\sleep.exe 5 
+
+taskkill -IM python.exe /F 
+ """ 
+	}
+}
 }
