@@ -17,7 +17,7 @@ buildWrappers.'hudson.plugins.timestamper.TimestamperBuildWrapper'
 sh """ 
 cd $WORKSPACE
 
-zip -r Azur_webapp.zip * -x *.zip *.pyc \*__pycache__\*
+zip -r Azur_webapp.zip * -x *.zip *.pyc *__pycache__*
 
 sleep 10
 
