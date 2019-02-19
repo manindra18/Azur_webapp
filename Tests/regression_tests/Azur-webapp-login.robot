@@ -6,7 +6,7 @@ Test Template     Login To The App
 Library           SeleniumLibrary
 
 *** Variables ***
-${LOGIN URL}      http://localhost:8000/login/
+${LOGIN URL}      http://192.168.4.71:8000/login/
 ${BROWSER}        Chrome
 ${USER}           mani
 ${PASSWORD}       Vedams123
