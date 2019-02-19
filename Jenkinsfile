@@ -14,7 +14,7 @@ node ('linux_slave') {
 sh """ 
 cd $WORKSPACE
 
-zip -r Azur_webapp.zip * -x *.zip *.pyc \*__pycache__\*
+zip -r Azur_webapp.zip * -x *.zip *.pyc *__pycache__*
 
 sleep 10
 
