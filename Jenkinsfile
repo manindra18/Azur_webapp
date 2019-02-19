@@ -71,8 +71,8 @@ node ('linux_slave') {
 	stage ('Webapp_Container - Build') {
 // Shell build step
 sh """ 
-docker build -t 'azur_webapp:latest' .
-docker create --name azure_webapp -p 8000:8000 -p 2222:2222 azur_webapp:latest && docker start azure_webapp
+sudo docker build -t 'azur_webapp:latest' .
+sudo docker create --name azure_webapp -p 8000:8000 -p 2222:2222 azur_webapp:latest && docker start azure_webapp
  """ 		
 	}
 }
