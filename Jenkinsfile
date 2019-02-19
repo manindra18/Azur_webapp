@@ -66,14 +66,13 @@ taskkill -IM python.exe /F
 		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'Reports', reportFiles: 'functest_report.html', reportName: 'Functional Test Report', reportTitles: 'Functional Test Report'])
 	}
 }
-node ('master') { 
+node ('linux_slave') { 
 
 	stage ('Webapp_Container - Build') {
 // Shell build step
 sh """ 
 docker build -t 'azur_webapp:latest' .
 docker create --name azure_webapp -p 8000:8000 -p 2222:2222 azur_webapp:latest && docker start azure_webapp
-
  """ 		
 	}
 }
@@ -89,8 +88,6 @@ c:\\sleep.exe 5
 pip3 install --upgrade robotframework-seleniumlibrary
 pip3 install --upgrade robotframework-selenium2library
 pip3 install robotframework-ride --trusted-host pypi.org
-
-start /min python Application\\manage.py runserver 0.0.0.0:8000
 
 c:\\sleep.exe 5
 
