@@ -70,14 +70,40 @@ taskkill -IM python.exe /F
 }
 node ('master') { 
 
-	stage ('Webapp_SelRegression - Build') {
+	stage ('Webapp_Container - Build') {
 // Shell build step
 sh """ 
 docker build -t 'azur_webapp:latest' .
 docker create --name azure_webapp -p 8000:8000 -p 2222:2222 azur_webapp:latest && docker start azure_webapp
+
+ """ 		
+	}
+}
+node ('windows') { 
+
+	stage ('Webapp_SelRegression - Build') {
+// Batch build step
+bat """ 
+c:\\unzip.exe -o Azur_webapp.zip
+
+c:\\sleep.exe 5
+
+pip3 install --upgrade robotframework-seleniumlibrary
+pip3 install --upgrade robotframework-selenium2library
+pip3 install robotframework-ride --trusted-host pypi.org
+
+start /min python Application\\manage.py runserver 0.0.0.0:8000
+
+c:\\sleep.exe 5
+
+python -m robot -d Reports\regression Tests\regression_tests\Azur-webapp-login.robot
+
+c:\\sleep.exe 5 
+
+taskkill -IM python.exe /F 
  """ 
 		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'Reports\\regression', reportFiles: 'report.html', reportName: 'Regression Test Report', reportTitles: 'Regression Test Report'])
 		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'Reports\\regression', reportFiles: 'log.html', reportName: 'Regression Test Log', reportTitles: 'Regression Test Log'])
-}
+	}
 }
 }
