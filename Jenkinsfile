@@ -65,6 +65,7 @@ c:\\sleep.exe 5
 
 taskkill -IM python.exe /F 
  """ 
+		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'Reports', reportFiles: 'functest_report.html', reportName: 'Functional Test Report', reportTitles: 'Functional Test Report'])
 	}
 }
 }
