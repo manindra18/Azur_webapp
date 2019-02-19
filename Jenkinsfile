@@ -1,7 +1,7 @@
 pipeline {
   agent any
   stages {
-    stage('Build') {
+    stage('Git Pull') {
       steps {
         echo 'Pulled the code from git repository'
       }
