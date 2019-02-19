@@ -61,7 +61,7 @@ python -m pytest --verbose --cov --html=Reports\\functest_report.html Tests\\fun
 
 c:\\sleep.exe 5 
 
-taskkill -IM python.exe /F 
+tasklist | find /i "python.exe" && taskkill /im python.exe /F || echo process "python.exe" not running.
  """ 
 		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'Reports', reportFiles: 'functest_report.html', reportName: 'Functional Test Report', reportTitles: 'Functional Test Report'])
 	}
@@ -96,7 +96,7 @@ python -m robot -d Reports\\regression --variable URL:"http://192.168.4.81:8000/
 
 c:\\sleep.exe 5 
 
-taskkill -IM python.exe /F 
+tasklist | find /i "python.exe" && taskkill /im python.exe /F || echo process "python.exe" not running. 
  """ 
 		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'Reports\\regression', reportFiles: 'report.html', reportName: 'Regression Test Report', reportTitles: 'Regression Test Report'])
 		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'Reports\\regression', reportFiles: 'log.html', reportName: 'Regression Test Log', reportTitles: 'Regression Test Log'])
