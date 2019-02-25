@@ -102,4 +102,14 @@ tasklist | find /i "python.exe" && taskkill /im python.exe /F || echo process "p
 		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'Reports\\regression', reportFiles: 'log.html', reportName: 'Regression Test Log', reportTitles: 'Regression Test Log'])
 	}
 }
+node ('linux_slave') { 
+
+	stage ('Webapp_image - upload to GCR') {
+// Shell build step
+sh """ 
+docker tag azur_webapp:latest gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
+docker push gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
+ """ 		
+	}
+}
 }
