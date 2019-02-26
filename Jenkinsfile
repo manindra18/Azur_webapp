@@ -110,7 +110,20 @@ sh """
 sudo docker tag azur_webapp:latest gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
 sudo docker push gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
 sudo docker rmi gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
- """ 		
+ """
+	}
+}
+node ('linux_slave') { 
+
+	stage ('Webapp_Deploy - Deploy the webApp on GCE') {
+// Shell build step
+sh """ 
+gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123"    
+ --command "sudo usermod -aG docker $USER"
+
+gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123"    
+ --command "sudo docker create --name azur_webapp -p 8000:8000 -p 2222:2222 gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER} && sudo docker start azur_webapp"
+ """
 	}
 }
 }
