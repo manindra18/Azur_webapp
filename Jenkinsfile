@@ -107,10 +107,11 @@ node ('linux_slave') {
 	stage ('Webapp_image - upload to GCR') {
 // Shell build step
 sh """
-cat $HOME/devops-gcp.json | docker login -u _json_key --password-stdin https://gcr.io
-sudo docker tag azur_webapp:latest gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
-sudo docker push gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
-sudo docker rmi gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
+cat $HOME/devops-gcp.json | sudo docker login -u _json_key --password-stdin https://gcr.io
+sleep 5
+sudo docker tag azur_webapp:latest gcr.io/devops-232312/azur_webapp:v1.${BUILD_NUMBER}
+sudo docker push gcr.io/devops-232312/azur_webapp:v1.${BUILD_NUMBER}
+sudo docker rmi gcr.io/devops-232312/azur_webapp:v1.${BUILD_NUMBER}
  """
 	}
 }
@@ -119,7 +120,6 @@ node ('linux_slave') {
 	stage ('Webapp_Deploy - Deploy the webApp on GCE') {
 // Shell build step
 sh """
-
 USER_STATUS=`gcloud config list account --format "value(core.account)"`
 echo ${USER_STATUS}
 if [ ! -z ${USER_STATUS} ]; then
@@ -129,11 +129,9 @@ else
 	gcloud auth activate-service-account jenkins-auth@devops-232312.iam.gserviceaccount.com --key-file=$HOME/devops-gcp.json --project=devops-232312
 fi
 
-gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123"    
- --command "sudo usermod -aG docker $USER"
-
-gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123"    
- --command "sudo docker create --name azur_webapp -p 8000:8000 -p 2222:2222 gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER} && sudo docker start azur_webapp"
+gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "sudo usermod -aG docker \$USER"
+gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "cat \$HOME/devops-gcp.json | docker login -u _json_key --password-stdin https://gcr.io"
+gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "sudo docker create --name azur_webapp -p 8000:8000 -p 2222:2222 gcr.io/devops-232312/azur_webapp:v1.${BUILD_NUMBER} && sudo docker start azur_webapp"
  """
 	}
 }
