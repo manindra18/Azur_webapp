@@ -106,7 +106,8 @@ node ('linux_slave') {
 
 	stage ('Webapp_image - upload to GCR') {
 // Shell build step
-sh """ 
+sh """
+cat $HOME/devops-gcp.json | docker login -u _json_key --password-stdin https://gcr.io
 sudo docker tag azur_webapp:latest gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
 sudo docker push gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
 sudo docker rmi gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
@@ -117,7 +118,17 @@ node ('linux_slave') {
 
 	stage ('Webapp_Deploy - Deploy the webApp on GCE') {
 // Shell build step
-sh """ 
+sh """
+
+USER_STATUS=`gcloud config list account --format "value(core.account)"`
+echo ${USER_STATUS}
+if [ ! -z ${USER_STATUS} ]; then
+        echo "user is already logged in..."
+else
+        echo "user is not logged in, logging in now"
+	gcloud auth activate-service-account jenkins-auth@devops-232312.iam.gserviceaccount.com --key-file=$HOME/devops-gcp.json --project=devops-232312
+fi
+
 gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123"    
  --command "sudo usermod -aG docker $USER"
 
