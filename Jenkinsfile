@@ -107,8 +107,8 @@ node ('linux_slave') {
 	stage ('Webapp_image - upload to GCR') {
 // Shell build step
 sh """ 
-docker tag azur_webapp:latest gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
-docker push gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
+sudo docker tag azur_webapp:latest gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
+sudo docker push gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
  """ 		
 	}
 }
