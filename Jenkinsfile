@@ -73,7 +73,7 @@ node ('linux_slave') {
 sh """ 
 sudo docker build -t 'azur_webapp:latest' .
 sudo docker rm -f azure_webapp
-sudo docker create --name azure_webapp -p 8000:8000 -p 2222:2222 azur_webapp:latest && sudo docker start azure_webapp
+sudo docker create --name azur_webapp -p 8000:8000 -p 2222:2222 azur_webapp:latest && sudo docker start azur_webapp
  """ 		
 	}
 }
@@ -123,7 +123,7 @@ sh """
 USER_STATUS=`gcloud config list account --format "value(core.account)"`
 echo ${USER_STATUS}
 if [ ! -z ${USER_STATUS} ]; then
-        echo "user is already logged in..."
+	echo "user is already logged in..."
 else
         echo "user is not logged in, logging in now"
 	gcloud auth activate-service-account jenkins-auth@devops-232312.iam.gserviceaccount.com --key-file=$HOME/devops-gcp.json --project=devops-232312
@@ -131,6 +131,7 @@ fi
 
 gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "sudo usermod -aG docker \$USER"
 gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "cat \$HOME/devops-gcp.json | docker login -u _json_key --password-stdin https://gcr.io"
+gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "for i in \$(sudo docker ps -a --format {{.Names}} | grep -iE 'azur_webapp'); do sudo docker rm -f \$i; done"
 gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "sudo docker create --name azur_webapp -p 8000:8000 -p 2222:2222 gcr.io/devops-232312/azur_webapp:v1.${BUILD_NUMBER} && sudo docker start azur_webapp"
  """
 	}
