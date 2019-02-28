@@ -56,26 +56,26 @@ python -m robot -d Reports\regression Tests\regression_tests\Azur-webapp-login.r
 
 To get the gcloud logged in user name:
 ---------------------------------------
-# gcloud config list account --format "value(core.account)"
+gcloud config list account --format "value(core.account)"
 
 To authenticate docker to push the local image to the GCR:
 -----------------------------------------------------------
-# cat $HOME/<key.json> | docker login -u _json_key --password-stdin https://gcr.io
+cat $HOME/<key.json> | docker login -u _json_key --password-stdin https://gcr.io
 
 Google auth activate service account on client machine:
 --------------------------------------------------------
-# gcloud auth activate-service-account <service_account> --key-file=$HOME/<key.json> --project=<project_ID>
+gcloud auth activate-service-account <service_account> --key-file=$HOME/<key.json> --project=<project_ID>
 
 To execute SSh commands using gcloud tool
 ------------------------------------------
 - To add the normal user to docker group
 
-# gcloud compute --project "<project_ID>" ssh --zone "us-central1-c" "<instance_name>" --command "sudo usermod -aG docker $USER"
+gcloud compute --project "<project_ID>" ssh --zone "us-central1-c" "<instance_name>" --command "sudo usermod -aG docker $USER"
 
 - To login to GRC to pull the image
 
-# gcloud compute --project "<project_ID>" ssh --zone "us-central1-c" "<instance_name>" --command "cat $HOME/<key.json> | docker login -u _json_key --password-stdin https://gcr.io"
+gcloud compute --project "<project_ID>" ssh --zone "us-central1-c" "<instance_name>" --command "cat $HOME/<key.json> | docker login -u _json_key --password-stdin https://gcr.io"
 
 - To start a container on GCP compute instance 
 
-# gcloud compute --project "<project_ID>" ssh --zone "us-central1-c" "<instance_name>" --command "sudo docker create --name azur_webapp -p 8000:8000 -p 2222:2222 gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER} && sudo docker start azur_webapp"
+gcloud compute --project "<project_ID>" ssh --zone "us-central1-c" "<instance_name>" --command "sudo docker create --name azur_webapp -p 8000:8000 -p 2222:2222 gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER} && sudo docker start azur_webapp"
