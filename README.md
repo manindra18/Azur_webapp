@@ -51,7 +51,9 @@ tasklist | find /i "python.exe" && taskkill /im python.exe /F || echo process "p
 Robot framework packages needed and execution of regression tests:
 -------------------------------------------------------------------
 pip install --upgrade robotframework-seleniumlibrary
+
 pip install --upgrade robotframework-selenium2library
+
 pip install robotframework-ride --trusted-host pypi.org
 
 python -m robot -d Reports\regression Tests\regression_tests\Azur-webapp-login.robot
