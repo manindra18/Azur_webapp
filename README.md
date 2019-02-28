@@ -4,8 +4,8 @@ An webapp to test the CI/CD deployment in jenkins with unit tests, functional an
 
 To build a Docker continer :
 ------------------------------
-docker build -t 'azur_webapp:latest' . \n
-docker rm -f test_webapp \n
+"docker build -t 'azur_webapp:latest' ."
+"docker rm -f test_webapp"
 docker create --name test_webapp -p 8000:8000 -p 2222:2222 azur_webapp:latest && docker start test_webapp
 
 To start the django server in background in windows:
