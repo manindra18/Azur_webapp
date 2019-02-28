@@ -121,8 +121,8 @@ node ('linux_slave') {
 // Shell build step
 sh """
 USER_STATUS=`gcloud config list account --format "value(core.account)"`
-echo ${USER_STATUS}
-if [ ! -z ${USER_STATUS} ]; then
+echo \${USER_STATUS}
+if [ ! -z \${USER_STATUS} ]; then
 	echo "user is already logged in..."
 else
         echo "user is not logged in, logging in now"
