@@ -141,4 +141,19 @@ gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-ser
  """
 	}
 }
+node ('windows') { 
+
+	stage ('Webapp_SelRegression - Build') {
+// Batch build step
+bat """ 
+python -m robot -d Reports\\regression --variable URL:"http://35.193.179.18:8000/login/" Tests\\regression_tests\\Azur-webapp-login.robot
+
+c:\\sleep.exe 5 
+
+tasklist | find /i "python.exe" && taskkill /im python.exe /F || echo process "python.exe" not running. 
+ """ 
+		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'Reports\\regression', reportFiles: 'report.html', reportName: 'Regression Test Report', reportTitles: 'Regression Test Report'])
+		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'Reports\\regression', reportFiles: 'log.html', reportName: 'Regression Test Log', reportTitles: 'Regression Test Log'])
+	}
+}
 }
