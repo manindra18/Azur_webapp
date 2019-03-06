@@ -106,7 +106,6 @@ node ('linux_slave') {
 
 	stage ('Webapp_image - upload to GCR') {
 // Shell build step
-<<<<<<< HEAD
 sh """ 
 docker tag azur_webapp:latest gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
 docker push gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
@@ -140,7 +139,6 @@ gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-ser
 gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "for i in \$(sudo docker ps -a --format {{.Names}} | grep -iE 'azur_webapp'); do sudo docker rm -f \$i; done"
 gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "sudo docker create --name azur_webapp -p 8000:8000 -p 2222:2222 gcr.io/devops-232312/azur_webapp:v1.${BUILD_NUMBER} && sudo docker start azur_webapp"
  """
->>>>>>> e5ab7f6538ed7903972e35eb3509717b7105b5c7
 	}
 }
 }
