@@ -72,7 +72,7 @@ node ('linux_slave') {
 // Shell build step
 sh """ 
 sudo docker build -t 'azur_webapp:latest' .
-sudo docker rm -f azure_webapp
+sudo docker rm -f azur_webapp
 sudo docker create --name azur_webapp -p 8000:8000 -p 2222:2222 azur_webapp:latest && sudo docker start azur_webapp
  """ 		
 	}
