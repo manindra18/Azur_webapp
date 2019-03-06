@@ -106,11 +106,6 @@ node ('linux_slave') {
 
 	stage ('Webapp_image - upload to GCR') {
 // Shell build step
-sh """ 
-docker tag azur_webapp:latest gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
-docker push gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
- """ 		
-=======
 sh """
 cat $HOME/devops-gcp.json | sudo docker login -u _json_key --password-stdin https://gcr.io
 sleep 5
