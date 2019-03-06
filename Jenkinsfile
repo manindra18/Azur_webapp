@@ -130,7 +130,7 @@ else
 fi
 
 gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "sudo usermod -aG docker \$USER"
-gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "cat \$HOME/devops-gcp.json | docker login -u _json_key --password-stdin https://gcr.io"
+gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "cat /home/jenkins/devops-gcp.json | docker login -u _json_key --password-stdin https://gcr.io"
 gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "for i in \$(sudo docker ps -a --format {{.Names}} | grep -iE 'azur_webapp'); do sudo docker rm -f \$i; done"
 gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "sudo docker create --name azur_webapp -p 8000:8000 -p 2222:2222 gcr.io/devops-232312/azur_webapp:v1.${BUILD_NUMBER} && sudo docker start azur_webapp"
  """
