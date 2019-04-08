@@ -72,7 +72,7 @@ node ('linux_slave') {
 // Shell build step
 sh """ 
 sudo docker build -t 'azur_webapp:latest' .
-sudo docker rm -f azure_webapp
+sudo docker rm -f azur_webapp
 sudo docker create --name azur_webapp -p 8000:8000 -p 2222:2222 azur_webapp:latest && sudo docker start azur_webapp
  """ 		
 	}
@@ -106,11 +106,6 @@ node ('linux_slave') {
 
 	stage ('Webapp_image - upload to GCR') {
 // Shell build step
-sh """ 
-docker tag azur_webapp:latest gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
-docker push gcr.io/devops-232312/azur_webapp:${BUILD_NUMBER}
- """ 		
-=======
 sh """
 cat $HOME/devops-gcp.json | sudo docker login -u _json_key --password-stdin https://gcr.io
 sleep 5
@@ -135,10 +130,25 @@ else
 fi
 
 gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "sudo usermod -aG docker \$USER"
-gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "cat \$HOME/devops-gcp.json | docker login -u _json_key --password-stdin https://gcr.io"
-gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "for i in \$(sudo docker ps -a --format {{.Names}} | grep -iE 'azur_webapp'); do sudo docker rm -f \$i; done"
+gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "cat /home/jenkins/devops-gcp.json | docker login -u _json_key --password-stdin https://gcr.io"
+gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "sudo docker rm -f azur_webapp"
 gcloud compute --project "devops-232312" ssh --zone "us-central1-c" "forseti-server-vm-fs-123" --command "sudo docker create --name azur_webapp -p 8000:8000 -p 2222:2222 gcr.io/devops-232312/azur_webapp:v1.${BUILD_NUMBER} && sudo docker start azur_webapp"
  """
+	}
+}
+node ('windows') { 
+
+	stage ('Webapp_SelRegression - Build') {
+// Batch build step
+bat """ 
+python -m robot -d Reports\\regression --variable URL:"http://35.193.179.18:8000/login/" Tests\\regression_tests\\Azur-webapp-login.robot
+
+c:\\sleep.exe 5 
+
+tasklist | find /i "python.exe" && taskkill /im python.exe /F || echo process "python.exe" not running. 
+ """ 
+		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'Reports\\regression', reportFiles: 'report.html', reportName: 'Regression Test Report', reportTitles: 'Regression Test Report'])
+		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'Reports\\regression', reportFiles: 'log.html', reportName: 'Regression Test Log', reportTitles: 'Regression Test Log'])
 	}
 }
 }
