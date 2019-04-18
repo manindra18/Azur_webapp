@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azur-webapp
+spec:
+  selector: 
+    matchLabels:
+      AzurApp: azur-webapp
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        AzurApp: azur-webapp
+    spec:
+      containers:
+      - name: azur-webapp
+        imagePullPolicy: Never
+        image: azur_webapp:latest
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: azur-service
+spec:
+  selector:
+    AzurApp: azur-webapp
+  ports:
+  - name: http
+    port: 8000
+    
+  - name: endpoint
+    port: 2222
+  
+  type: NodePort      
