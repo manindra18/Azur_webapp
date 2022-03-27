@@ -29,7 +29,7 @@ mkdir Reports
 
 fi
 
-sudo python3.6 -m pytest --verbose --cov --html=Reports/unittest_report.html Tests/unit_tests/ 
+sudo python3 -m pytest --verbose --cov --html=Reports/unittest_report.html Tests/unit_tests/ 
  """
 		archiveArtifacts allowEmptyArchive: false, artifacts: '*.zip', caseSensitive: true, defaultExcludes: true, excludes: 'Reports', fingerprint: false, onlyIfSuccessful: false 
 		sleep 5
@@ -92,7 +92,7 @@ pip3 install robotframework-ride --trusted-host pypi.org
 
 c:\\sleep.exe 5
 
-python -m robot -d Reports\\regression --variable URL:"http://192.168.4.81:8000/login/" Tests\\regression_tests\\Azur-webapp-login.robot
+python -m robot -d Reports\\regression --variable URL:"http://localhost:8000/login/" Tests\\regression_tests\\Azur-webapp-login.robot
 
 c:\\sleep.exe 5 
 
